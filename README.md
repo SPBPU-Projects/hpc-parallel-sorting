@@ -110,6 +110,16 @@ Benchmarks were conducted with varying input sizes and different numbers of thre
 
 > Refer to `Report.pdf` for detailed build instructions, execution parameters, and benchmark settings.
 
+## Running on HPC (Slurm)
+The project was executed on the SPbPU supercomputer using the Slurm workload manager.
+
+Example job submission commands:
+```bash
+sbatch slurm/run_mpi.sbatch
+sbatch slurm/run_openmp.sbatch
+sbatch slurm/run_pthreads.sbatch 
+```
+
 
 
 ---
