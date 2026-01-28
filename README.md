@@ -111,7 +111,6 @@ mpirun -np 112 python sort_mpi4py.py
 ```
 
 
-```md
 ## Running on HPC (Slurm – Optional Batch Mode)
 
 The original benchmarks were performed using **interactive Slurm sessions** on the Tornado cluster.  
@@ -121,11 +120,12 @@ For completeness and reproducibility, example **batch-mode Slurm scripts** are p
 sbatch slurm/run_mpi.sbatch
 sbatch slurm/run_openmp.sbatch
 sbatch slurm/run_pthreads.sbatch
+```
 ---
 
 
 
-```md
+
 ## Results
 
 The results demonstrate clear performance differences between threading-based and message-passing approaches, highlighting the impact of communication overhead, memory access patterns, and scalability limits of each model.
@@ -141,7 +141,8 @@ Detailed numerical results and performance plots are available in:
 
 ## Academic Context
 
-This project was developed as part of coursework and practical training in \*\*High-Performance Computing\*\* at Saint Petersburg Polytechnic University (SPbPU).
+This project was developed as part of coursework and practical training in **High-Performance Computing**
+ at Saint Petersburg Polytechnic University (SPbPU).
 
 
 
@@ -151,7 +152,8 @@ This project was developed as part of coursework and practical training in \*\*H
 
 ## Author
 
-\*\*Matin Dastanboo\*\*  
+**Matin Dastanboo**
+
 
 MSc Student – Artificial Intelligence & Machine Learning 
 
