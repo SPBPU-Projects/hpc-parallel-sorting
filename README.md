@@ -135,6 +135,15 @@ Detailed numerical results and performance plots are available in:
 - `plots/`
 - `Report.pdf`
 
+## Performance Plots
+
+### Execution Time
+![Execution Time](plots/1.png)
+
+### Speedup
+![Speedup](plots/2.png)
+
+
 ---
 
 
