@@ -1,4 +1,25 @@
 # HPC Parallel Sorting
+![C](https://img.shields.io/badge/C-blue)
+![Python](https://img.shields.io/badge/Python-yellow)
+![MPI](https://img.shields.io/badge/MPI-red)
+![OpenMP](https://img.shields.io/badge/OpenMP-green)
+![Pthreads](https://img.shields.io/badge/Pthreads-orange)
+![Slurm](https://img.shields.io/badge/Slurm-lightgrey)
+![Linux](https://img.shields.io/badge/Linux-important)
+![HPC](https://img.shields.io/badge/HPC-black)
+![SPbPU](https://img.shields.io/badge/SPbPU-blueviolet)
+![Done](https://img.shields.io/badge/Completed-success)
+![C11](https://img.shields.io/badge/C-ISO%20C11-blue)
+![Python3](https://img.shields.io/badge/Python-3.x-yellow)
+![mpi4py](https://img.shields.io/badge/mpi4py-MPI%20for%20Python-red)
+![POSIX](https://img.shields.io/badge/POSIX-Threads-orange)
+![Parallel Computing](https://img.shields.io/badge/Field-Parallel%20Computing-darkgreen)
+![Distributed Systems](https://img.shields.io/badge/Model-Distributed%20Systems-purple)
+![Shared Memory](https://img.shields.io/badge/Model-Shared%20Memory-lightblue)
+![Benchmarked](https://img.shields.io/badge/Benchmarked-Yes-success)
+![Reproducible](https://img.shields.io/badge/Reproducible-Experiments-brightgreen)
+![Academic Project](https://img.shields.io/badge/Type-Academic%20Project-informational)
+
 
 ## Overview
 
@@ -8,6 +29,40 @@ The objective is to analyze scalability, efficiency, and runtime behavior across
 All implementations were executed and benchmarked on the **SPbPU supercomputer (Tornado cluster)**, providing realistic performance measurements beyond theoretical analysis or local-machine testing.
 
 ---
+
+
+## Preview
+
+The figure below compares the **best runtime achieved by each implementation**
+for an input size of **N = 500**, measured from real executions on the
+**SPbPU Tornado supercomputer**.
+
+<p align="center">
+  <img src="plots/11.png" width="80%">
+  <br>
+  <em>Best runtime per implementation (N = 500)</em>
+</p>
+
+As expected, shared-memory C implementations (Pthreads and OpenMP)
+achieve the lowest runtimes due to minimal communication overhead,
+while mpi4py exhibits higher execution time because of Python-level
+overhead and inter-process communication costs.
+
+
+
+
+
+
+## Table of Contents
+- [Implemented Approaches](#implemented-approaches)
+- [Project Structure](#project-structure)
+- [Experimental Setup](#experimental-setup)
+- [Execution Configuration (SPbPU Tornado)](#execution-configuration-spbpu-tornado)
+- [How to Run](#how-to-run)
+- [Results](#results)
+- [Performance Plots](#performance-plots)
+- [Academic Context](#academic-context)
+
 
 ## Implemented Approaches
 
@@ -123,6 +178,49 @@ sbatch slurm/run_pthreads.sbatch
 ```
 ---
 
+## Execution Evidence (Real HPC Runs)
+
+The following screenshots demonstrate **real executions** of the implemented
+parallel sorting algorithms on the **SPbPU Tornado supercomputer**.
+These are **not simulated results** and were obtained directly from interactive
+and multi-node HPC sessions.
+
+### Pthreads Execution (Shared Memory)
+
+- Single compute node
+- Manual thread creation via `pthread_create`
+- Thread counts: 1, 2, 4, 8, 14, 28
+
+![Pthreads Execution](assets/14.png)
+
+---
+
+### OpenMP Execution (Shared Memory)
+
+- Single compute node
+- Thread control via `OMP_NUM_THREADS`
+- Thread counts: 1, 2, 4, 8, 14, 28
+
+![OpenMP Execution](assets/23.png)
+
+---
+
+### MPI Execution – Single Node
+
+- Distributed-memory model
+- MPI ranks running on a single node
+
+![MPI Single Node](assets/28.png)
+
+---
+
+### MPI / mpi4py Execution – Multi Node
+
+- Multi-node distributed execution on Tornado
+- 4–8 nodes, up to 224 MPI ranks
+- Python-based MPI using `mpi4py`
+
+![MPI Multi Node](assets/37.png)
 
 
 
