@@ -1,152 +1,145 @@
-\# HPC Parallel Sorting
+# HPC Parallel Sorting
 
+## Overview
 
+This project presents a comprehensive implementation and performance evaluation of parallel sorting algorithms using multiple parallel programming paradigms.  
+The objective is to analyze scalability, efficiency, and runtime behavior across **shared-memory** and **distributed-memory** models on a real high-performance computing (HPC) system.
 
-\## Overview
-
-This project presents a comprehensive implementation and performance evaluation of parallel sorting algorithms using multiple parallel programming paradigms. The goal is to compare scalability, efficiency, and runtime behavior across shared-memory and distributed-memory models on a real high-performance computing (HPC) system.
-
-
-
-All implementations were executed and benchmarked on the \*\*SPbPU supercomputer\*\*, providing realistic performance measurements beyond theoretical or local-machine testing.
-
-
+All implementations were executed and benchmarked on the **SPbPU supercomputer (Tornado cluster)**, providing realistic performance measurements beyond theoretical analysis or local-machine testing.
 
 ---
 
-
-
-\## Implemented Approaches
+## Implemented Approaches
 
 The following parallel programming models are implemented and analyzed:
 
+- **MPI (C)**  
+  Distributed-memory parallel sorting using message passing across multiple processes.
 
+- **OpenMP (C)**  
+  Shared-memory parallel sorting using compiler-assisted multithreading.
 
-\- \*\*MPI (C)\*\*  
+- **POSIX Threads (Pthreads, C)**  
+  Low-level shared-memory parallel sorting with explicit thread management.
 
-&nbsp; Distributed-memory parallel sorting using message passing across multiple processes.
+- **mpi4py (Python)**  
+  Python-based distributed parallel sorting using MPI bindings.
 
+---
 
+## Project Structure
 
-\- \*\*OpenMP (C)\*\*  
-
-&nbsp; Shared-memory parallel sorting using multithreading directives.
-
-
-
-\- \*\*POSIX Threads (Pthreads, C)\*\*  
-
-&nbsp; Low-level thread-based parallel sorting with explicit thread management.
-
-
-
-\- \*\*mpi4py (Python)\*\*  
-
-&nbsp; Python-based distributed parallel sorting using MPI bindings.
-
-
-
+```
+├── src/        # Source code (C and Python implementations)
+├── data/       # Input datasets
+├── results/    # Raw output files from real executions
+├── plots/      # Performance plots and visualizations
+├── assets/     # Supplementary figures and illustrations
+├── slurm/      # Optional Slurm batch scripts
+├── Makefile    # Build automation
+└── Report.pdf  # Detailed analysis and discussion
+```
 ---
 
 
 
-\## Project Structure
+## Experimental Setup
 
+- **Platform:** SPbPU High-Performance Computing System (Tornado)
+- **Programming Languages:** C, Python
+- **Parallel Models:** MPI, OpenMP, Pthreads
+- **Evaluation Metrics:**
+  - Execution time
+  - Speedup
+  - Scalability
+  - Comparative performance across models
 
-
----
-
-
-
-\## Experimental Setup
-
-\- \*\*Platform:\*\* SPbPU High-Performance Computing System  
-
-\- \*\*Programming Languages:\*\* C, Python  
-
-\- \*\*Parallel Models:\*\* MPI, OpenMP, Pthreads  
-
-\- \*\*Evaluation Metrics:\*\*
-
-&nbsp; - Execution time
-
-&nbsp; - Speedup
-
-&nbsp; - Scalability
-
-&nbsp; - Comparative performance across models
-
-
-
-Benchmarks were conducted with varying input sizes and different numbers of threads/processes to evaluate both strong and weak scaling behavior.
-
-
+Benchmarks were conducted with varying numbers of threads and MPI processes to evaluate parallel efficiency and scalability behavior.
 
 ---
 
+## Execution Configuration (SPbPU Tornado)
 
+All benchmarks and result files in this repository were obtained from **real executions on the SPbPU Tornado supercomputer**, primarily using **interactive Slurm sessions**.  
+The files stored in the `results/` directory correspond to actual runs performed on the cluster.
 
-\## Key Features
+### 1. C + Pthreads (Shared Memory)
 
-\- Real execution on a university supercomputer (not simulated)
+- **Execution model:** Shared memory (single node)
+- **Nodes:** 1
+- **Processes:** 1
+- **Threads:** 1, 2, 4, 8, 14, 28
+- **Parallelization control:** Manual thread creation via `pthread_create`
+- **Execution environment:** Single Tornado compute node
 
-\- Comparison of shared-memory vs distributed-memory paradigms
+### 2. C + OpenMP (Shared Memory)
 
-\- Unified problem definition across all implementations
+- **Execution model:** Shared memory (single node)
+- **Nodes:** 1
+- **Processes:** 1
+- **Threads:** 1, 2, 4, 8, 14, 28
+- **Parallelization control:** `OMP_NUM_THREADS` environment variable
+- **Execution environment:** Single Tornado compute node
 
-\- Reproducible experiments using provided input data
+### 3. C + MPI (Distributed Memory)
 
-\- Detailed performance analysis documented in the report
+- **Execution model:** Distributed memory (MPI)
 
+| Nodes | Tasks per node | Total MPI ranks |
+|------:|---------------:|----------------:|
+| 1     | 28             | 28              |
+| 4     | 28             | 112             |
+| 8     | 28             | 224             |
 
-
----
-
-
-
-\## How to Run (Example)
-
-> Compilation and execution commands depend on the target HPC environment and scheduler configuration.  
-
-> Refer to `Report.pdf` for detailed build instructions, execution parameters, and benchmark settings.
-
-## Running on HPC (Slurm)
-The project was executed on the SPbPU supercomputer using the Slurm workload manager.
-
-Example job submission commands:
+- **Example execution command:**
 ```bash
-sbatch slurm/run_mpi.sbatch
-sbatch slurm/run_openmp.sbatch
-sbatch slurm/run_pthreads.sbatch 
+srun -N 4 -n 112 ./sort_mpi
+
+```
+### 4. Python + mpi4py (Distributed Memory)
+
+- **Execution model:** Distributed memory (MPI with Python)
+
+| Nodes | Tasks per node | Total MPI ranks |
+|------:|---------------:|----------------:|
+| 4     | 28             | 112             |
+| 8     | 28             | 224             |
+
+- **Example execution command:**
+```bash
+mpirun -np 112 python sort_mpi4py.py
 ```
 
 
+```md
+## Running on HPC (Slurm – Optional Batch Mode)
 
+The original benchmarks were performed using **interactive Slurm sessions** on the Tornado cluster.  
+For completeness and reproducibility, example **batch-mode Slurm scripts** are provided as an **optional** execution method.
+
+```bash
+sbatch slurm/run_mpi.sbatch
+sbatch slurm/run_openmp.sbatch
+sbatch slurm/run_pthreads.sbatch
 ---
 
 
 
-\## Results
+```md
+## Results
 
 The results demonstrate clear performance differences between threading-based and message-passing approaches, highlighting the impact of communication overhead, memory access patterns, and scalability limits of each model.
 
-
-
-Detailed numerical results and plots are available in:
-
-\- `results/`
-
-\- `plots/`
-
-\- `Report.pdf`
-
-
+Detailed numerical results and performance plots are available in:
+- `results/`
+- `plots/`
+- `Report.pdf`
 
 ---
 
 
 
-\## Academic Context
+## Academic Context
 
 This project was developed as part of coursework and practical training in \*\*High-Performance Computing\*\* at Saint Petersburg Polytechnic University (SPbPU).
 
@@ -156,7 +149,7 @@ This project was developed as part of coursework and practical training in \*\*H
 
 
 
-\## Author
+## Author
 
 \*\*Matin Dastanboo\*\*  
 
