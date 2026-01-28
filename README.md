@@ -143,6 +143,8 @@ Detailed numerical results and performance plots are available in:
 ### Speedup
 ![Speedup](plots/2.png)
 
+The plots illustrate improved scalability for MPI at higher process counts, 
+while OpenMP and Pthreads exhibit saturation due to shared-memory limitations.
 
 ---
 
